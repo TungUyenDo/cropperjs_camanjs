@@ -1,0 +1,125 @@
+@media (min-width: 576px) {
+    .modal-dialog {
+        margin: 1.75rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.main-picture {
+    max-width: 500px;
+    margin: 100px 0
+}
+
+.main-picture img {
+    width: 100%;
+}
+
+
+.range-pull{
+    position: relative;
+}
+
+.filter-right{
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* ----------------------------------------------- */
+
+.modal .modal-body {
+    max-width:600px;
+    margin:0 auto
+}
+.modal .modal-body canvas {
+    width: 100%;
+}
+
+.modal .modal-content {
+    -webkit-box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
+    -moz-box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
+    box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
+    border-radius: .6rem;
+
+    border-top: 1px solid #000;
+    background-color: #1b2024;
+}
+
+.modal .modal-title {
+    color: #fff;
+    font-size: 12px;
+}
+
+.modal .modal-actions {
+    background-color: #22282e;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#303740), to(#22282e));
+    background-image: -moz-linear-gradient(top, #303740, #22282e);
+    background-image: -ms-linear-gradient(top, #303740, #22282e);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #303740), color-stop(100%, #22282e));
+    background-image: -webkit-linear-gradient(top, #303740, #22282e);
+    background-image: -o-linear-gradient(top, #303740, #22282e);
+    background-image: linear-gradient(top, #303740, #22282e);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#303740', endColorstr='#22282e', GradientType=0);
+}
+
+.modal .modal-header {
+    border-bottom: 1px solid #000;
+    -webkit-box-shadow: 0 1px 0 0 rgba(87, 90, 99, .66)inset;
+    -moz-box-shadow: 0 1px 0 0 rgba(87, 90, 99, .66)inset;
+    box-shadow: 0 1px 0 0 rgba(87, 90, 99, .66)inset;
+    background-color: #303740;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(#343b45), to(#303740));
+    background-image: -moz-linear-gradient(top, #343b45, #303740);
+    background-image: -ms-linear-gradient(top, #343b45, #303740);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #343b45), color-stop(100%, #303740));
+    background-image: -webkit-linear-gradient(top, #343b45, #303740);
+    background-image: -o-linear-gradient(top, #343b45, #303740);
+    background-image: linear-gradient(top, #343b45, #303740);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#343b45', endColorstr='#303740', GradientType=0);
+    -webkit-border-top-left-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    -moz-border-radius-topright: 8px;
+    border-top-right-radius: 8px;
+}
+
+.modal .modal-footer {
+    border: none
+}
+
+.filters {
+    padding: 15px
+}
+
+.filter-left {
+    width: calc(100% - 130px);
+    float: left;
+    text-align: left;
+    border-right: 1px solid #000;
+    background-image: -khtml-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, .3)), to(transparent));
+    background-image: -moz-linear-gradient(top, rgba(0, 0, 0, .3), transparent);
+    background-image: -ms-linear-gradient(top, rgba(0, 0, 0, .3), transparent);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0, 0, 0, .3)), color-stop(100%, transparent));
+    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, .3), transparent);
+    background-image: -o-linear-gradient(top, rgba(0, 0, 0, .3), transparent);
+    background-image: linear-gradient(top, rgba(0, 0, 0, .3), transparent);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba(0, 0, 0, 0.3)', endColorstr='transparent', GradientType=0);
+    box-shadow: none;
+}
+
+.filter-right {
+    /* padding: 15px; */
+    text-align: right;
+    float: right;
+
+}
+
+.filter-right button {
+    -webkit-box-shadow: 0 1px 0 0 rgba(255, 255, 255, .1)inset, 2px 0 0 rgba(255, 255, 255, .05)inset;
+    -moz-box-shadow: 0 1px 0 0 rgba(255, 255, 255, .1)inset, 2px 0 0 rgba(255, 255, 255, .05)inset;
+    box-shadow: 0 1px 0 0 rgba(255, 255, 255, .1)inset, 2px 0 0 rgba(255, 255, 255, .05)inset;
+}
