@@ -1,12 +1,3 @@
-@media (min-width: 576px) {
-    .modal-dialog {
-        margin: 1.75rem;
-        max-width: 1200px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
 .main-picture {
     max-width: 500px;
     margin: 100px 0
@@ -26,10 +17,53 @@
     top: 50%;
     transform: translateY(-50%);
 }
-.docs-buttons > .btn, .docs-buttons > .btn-group, .docs-buttons > .form-control {
+
+.docs-buttons>.btn,
+.docs-buttons>.btn-group,
+.docs-buttons>.form-control {
     margin-bottom: 0;
 }
+
 /* ----------------------------------------------- */
+
+.docs-toggles label {
+    margin-bottom: 0 !important
+}
+
+.cropper-face {
+    background-color: transparent;
+    left: 0;
+    top: 0;
+}
+
+.modal-actions .btn.disabled,
+.modal-actions .btn:disabled {
+    opacity: 1;
+    color: #fff;
+    background-color: #0062cc;
+    border-color: #005cbf;
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        margin: 1.75rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100% - 50px);
+    }
+}
+
+@media (min-width: 576px) {
+    .modal-dialog {
+        margin: 1.75rem;
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        height: calc(100% - 50px);
+    }
+}
+
 .modal-footer {
     display: -ms-flexbox;
     display: flex;
@@ -40,16 +74,31 @@
     padding: 1rem;
     border-top: 1px solid #e9ecef;
 }
-.preview-left{
-    width: 45%;
-    float: left;
+
+.preview-left {
+    width: 100%;
+    /* float: left; */
 }
-.preview-right{
+
+.preview-right {
+    display: none;
     width: 45%;
     float: right;
 }
+
+@media(max-width:1100px) {
+    .preview-left {
+        float: none;
+        width: 100%
+    }
+    .preview-right {
+        float: none;
+        width: 100%
+    }
+}
+
 .modal .modal-body {
-    max-width:800px;
+    max-width: 1000px;
     margin: 0 auto
 }
 
@@ -64,6 +113,7 @@
     border-radius: .6rem;
     border-top: 1px solid #000;
     background-color: #1b2024;
+    height: 100%;
 }
 
 .modal .modal-title {
@@ -108,8 +158,9 @@
 .modal .modal-footer {
     border: none;
 }
-.loading{
-    color:#fff
+
+.loading {
+    color: #fff
 }
 
 .filters {
