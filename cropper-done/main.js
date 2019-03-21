@@ -545,49 +545,8 @@
 
 
 		$('#actionEdit').on('click', function () {
-			// $('#actionEdit').click(function(){
 			$('#myModal').modal('show');
 			// StartCrop();
-
-			if (cropped) {
-				var $this = $(this);
-				// console.log($this)
-
-				var data = $this.data();
-				// console.log(data)
-
-				var cropper = $imageCanvas.data('cropper');
-				var cropped;
-				var result;
-
-				cropped = cropper.cropped;
-
-				setTimeout(() => {
-					if ($this.prop('disabled') || $this.hasClass('disabled')) {
-						return;
-					}
-
-					cropped = cropper.cropped;
-
-					if (cropper && data.method) {
-						data = $.extend({}, data);
-
-						if (uploadedImageType === 'image/jpeg') {
-							if (!data.option) {
-								data.option = {};
-							}
-							data.option.fillColor = '#fff';
-						}
-						result = $imageCanvas.cropper(data.method, data.option, data.secondOption);
-						if (result) {
-							result.id = 'canvasResult';
-							// preview picture
-							$('#resultCanvas').html(result);
-						}
-					}
-				}, 500);
-
-			}
 		})
 
 		//check modal hide -> destroy crop and revert canmanjs
@@ -598,7 +557,6 @@
 				this.revert(false);
 				this.render();
 				DestroyCrop();
-				$('#resultCanvas').html('');
 
 			});
 			window.isCrop = false
@@ -773,7 +731,7 @@
 				}
 
 				result = $imageCanvas.cropper(data.method, data.option, data.secondOption);
-				console.log(data.option)
+				console.log(data.option, data.method)
 				switch (data.method) {
 					case 'rotate':
 						$imageCanvas.cropper('crop');
@@ -786,7 +744,7 @@
 
 					case 'getCroppedCanvas':
 						if (result) {
-							// console.log(result)
+							console.log(result)
 							//add id attribute
 							// result.id = 'canvasResult';
 							// console.log(data.option,data.method)
