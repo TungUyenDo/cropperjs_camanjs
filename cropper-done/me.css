@@ -26,6 +26,51 @@
 
 /* ----------------------------------------------- */
 
+.rotate-number {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 105px;
+    z-index: 2;
+}
+
+.rotate-number .rotate-deg {
+    width: 100%;
+    background: #fff;
+    text-align: right;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.rotate-number.active {
+    display: block;
+}
+
+.rotate-contain {
+    position: relative;
+}
+
+.brightness-slide input {
+    width: 200px;
+    -webkit-appearance: none !important;
+    background-color: #fff;
+    cursor: pointer;
+    height: 1px;
+    vertical-align: 1px;
+    outline: none;
+}
+
+#myModalCanvas .modal-content .close {
+    color: #fff;
+}
+
+#myModalCanvas .modal-content .docs-toggles>.btn,
+#myModalCanvas .modal-content .docs-toggles>.btn-group,
+#myModalCanvas .modal-content .docs-toggles>.dropdown {
+    margin-bottom: 0;
+}
+
 .docs-toggles label {
     margin-bottom: 0 !important
 }
@@ -36,8 +81,8 @@
     top: 0;
 }
 
-.modal-actions .btn.disabled,
-.modal-actions .btn:disabled {
+#myModalCanvas .modal-actions .btn.disabled,
+#myModalCanvas .modal-actions .btn:disabled {
     opacity: 1;
     color: #fff;
     background-color: #0062cc;
@@ -45,7 +90,7 @@
 }
 
 @media (min-width: 576px) {
-    .modal-dialog {
+    #myModalCanvas .modal-dialog {
         margin: 1.75rem;
         max-width: 1200px;
         margin-left: auto;
@@ -55,7 +100,7 @@
 }
 
 @media (min-width: 576px) {
-    .modal-dialog {
+    #myModalCanvas .modal-dialog {
         margin: 1.75rem;
         max-width: 1200px;
         margin-left: auto;
@@ -64,7 +109,7 @@
     }
 }
 
-.modal-footer {
+#myModalCanvas .modal-footer {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -97,16 +142,16 @@
     }
 }
 
-.modal .modal-body {
+#myModalCanvas.modal .modal-body {
     max-width: 1000px;
     margin: 0 auto
 }
 
-.modal .modal-body canvas {
+#myModalCanvas.modal .modal-body canvas {
     width: 100%;
 }
 
-.modal .modal-content {
+#myModalCanvas.modal .modal-content {
     -webkit-box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
     -moz-box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
     box-shadow: inset 0 -2px 5px rgba(61, 61, 61, .5), 0 6px 44px rgba(0, 0, 0, .7);
@@ -116,12 +161,12 @@
     height: 100%;
 }
 
-.modal .modal-title {
+#myModalCanvas.modal .modal-title {
     color: #fff;
     font-size: 12px;
 }
 
-.modal .modal-actions {
+#myModalCanvas.modal .modal-actions {
     background-color: #22282e;
     background-image: -khtml-gradient(linear, left top, left bottom, from(#303740), to(#22282e));
     background-image: -moz-linear-gradient(top, #303740, #22282e);
@@ -133,7 +178,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#303740', endColorstr='#22282e', GradientType=0);
 }
 
-.modal .modal-header {
+#myModalCanvas.modal .modal-header {
     border-bottom: 1px solid #000;
     -webkit-box-shadow: 0 1px 0 0 rgba(87, 90, 99, .66)inset;
     -moz-box-shadow: 0 1px 0 0 rgba(87, 90, 99, .66)inset;
@@ -155,7 +200,7 @@
     border-top-right-radius: 8px;
 }
 
-.modal .modal-footer {
+#myModalCanvas.modal .modal-footer {
     border: none;
 }
 

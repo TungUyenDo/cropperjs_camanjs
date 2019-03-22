@@ -2,6 +2,7 @@
 
 
 	window.isCrop = false;
+	window.arrActions = [];
 	$(document).ready(function(){
 		// caman===============================================================================================
 		var canvas = document.getElementById('canvas');
@@ -19,22 +20,28 @@
 		}
 
 		var $reset = $('#resetbtn');
-		var $brightness = $('.brightnessbtn');
-		var $sharpen = $('.sharpenbtn');
-		var $save = $('#savebtn');
+		var $pinhole = $('#pinholebtn');
 
 		/* As soon as slider value changes call applyFilters */
 		$('input[type=range]').change(applyFilters);
 
 		function applyFilters() {
-			var hue = parseInt($('#hue').val());
-			var cntrst = parseInt($('#contrast').val());
-			var vibr = parseInt($('#vibrance').val());
-			var sep = parseInt($('#sepia').val());
+			if (window.isCrop == true) {
+				DestroyCrop();
+			}
+			var bright = parseInt($('#brightness').val());
 
 			Caman('#canvas', img, function () {
 				this.revert(false);
-				this.hue(hue).contrast(cntrst).vibrance(vibr).sepia(sep).render();
+				this.brightness(bright);
+				$('.loading').html('Loading brightness...');
+				this.render(function () {
+					if (window.isCrop == true) {
+						StartCrop();
+					}
+					$('.loading').html('Done!')
+					setTimeout(function () { $('.loading').html('') }, 1500);
+				});
 			});
 		}
 
@@ -46,64 +53,21 @@
 				this.render();
 				DestroyCrop();
 				window.isCrop = false;
+				// window.times = 0;
+				window.arrActions = [];
 			});
 		});
-		var i_brightness = 0;
+
+		
 		/* In built filters */  /* click and pull for range on input element */
-		$brightness.on('click', function (e) {
-			var method = $(this).attr('data-method');
-
-			if (window.isCrop == true) {
-				DestroyCrop();
-			}
-
-			Caman('#canvas', function () {
-				if (method == 'plus') {
-					this.revert(false);
-					this.render();
-					i_brightness = i_brightness + 10;
-				}
-				else {
-					this.revert(false);
-					this.render();
-					i_brightness = i_brightness - 10;
-				}
-				this.brightness(i_brightness);
-
-				$('.loading').html('Loading...');
-
-				this.render(function () {
-					if (window.isCrop == true) {
-						StartCrop();
-					}
-					$('.loading').html('Done!')
-					setTimeout(function () { $('.loading').html('') }, 1500);
-				});
-
-			});
-		});
-		var i_sharpen = 0;
-		/* In built filters */  /* click and pull for range on input element */
-		$sharpen.on('click', function (e) {
-			var method = $(this).attr('data-method');
+		$pinhole.on('click', function (e) {
 
 			if (window.isCrop == true) {
 				DestroyCrop();
 			}
 			Caman('#canvas', img, function () {
 				// DestroyCrop();
-
-				if (method == 'plus') {
-					this.revert(false);
-					this.render();
-					i_sharpen = i_sharpen + 10;
-				}
-				else {
-					this.revert(false);
-					this.render();
-					i_sharpen = i_sharpen - 10;
-				}
-				this.sharpen(i_sharpen);
+				this.pinhole();
 				$('.loading').html('Loading sharpen...');
 				this.render(function () {
 					if (window.isCrop == true) {
@@ -115,62 +79,54 @@
 			});
 		});
 
-		/* You can also save it as a jpg image, extension need to be added later after saving image. */
-
-		$save.on('click', function (e) {
-			Caman('#canvas', img, function () {
-				this.render(function () {
-					this.save('png');
-				});
-			});
-		});
-
 
 		//end caman===============================================================================================
 
 
 		$('#actionEdit').on('click', function () {
-			$('#myModal').modal('show');
+			$('#myModalCanvas').modal('show');
 		})
 
 		//check modal hide -> destroy crop and revert canmanjs
-		$('#myModal').on('hidden.bs.modal', function (e) {
+		$('#myModalCanvas').on('hidden.bs.modal', function (e) {
 			$('input[type=range]').val(0);
 
 			Caman('#canvas', img, function () {
 				this.revert(false);
 				this.render();
 				DestroyCrop();
+				window.isCrop = false;
 			});
-			window.isCrop = false;
-			window.times = 0;
 		})
 
 		var console = window.console || { log: function () { } };
-		var URL = window.URL || window.webkitURL;
 		var $imageCanvas = $('#canvas');
-		var originalImageURL = $('picture').attr('src');
-
-		var options = {
-			viewMode: 1,
-			aspectRatio: 16 / 9,
-			minContainerWidth: 500,
-			minContainerHeight: 300,
-		};
+		var originalImageURL = $('#picture').attr('src');
+		var uploadedImageName = 'cropped.jpg';
 		var uploadedImageType = 'image/jpeg';
 		var uploadedImageURL;
 
+		var options = {
+			viewMode: 1,
+			aspectRatio:4 / 3,
+			minContainerWidth: 500,
+			minContainerHeight: 300,
+		};
+
 		function StartCrop() {
 			window.isCrop = true;
-			$imageCanvas.on().cropper(options);
+			$imageCanvas.cropper(options);
 		}
 		function DestroyCrop() {
-			$imageCanvas.on().cropper('destroy');
-			$imageCanvas.attr('src', originalImageURL);
+			
+			// window.times = 0;
+			window.arrActions = [];
+			
+			$imageCanvas.cropper('destroy');
 			console.log('destroy')
 		}
 		
-		// docs-toggles
+		//click ratio 4/3, 16/9...
 		$('.docs-toggles').on('click', function () {
 			StartCrop();
 
@@ -215,130 +171,188 @@
 			}
 		});
 
-
-		window.arrActions = [];
-
-		// Methods
 		window.times = 0;
 		$('.docs-buttons').on('click', '[data-method]', function () {
 			window.times ++;
+			var result;
 			if(window.times == 1){
-				var option = $(this).attr('data-option')
-				$imageCanvas.on({
-					ready:function(){
-						switch(data.method){
+				window.isCrop = true;
+				var method = $(this).attr('data-method');
+				var option = $(this).attr('data-option');
+				$imageCanvas.cropper({
+					...options,
+					ready: function (e) {
+						switch (method) {
 							case 'rotate':
-								this.cropper.rotate(option)
+								result = this.cropper.rotate(option);
 								break;
 
 							case 'scaleX':
-								this.cropper.scale(option, -option);
+								result = this.cropper.scaleX(option);
+								$(this).data('option', -data.option);
 								break;
 
 							case 'scaleY':
-							this.cropper.scale(-option, option);
+								result = this.cropper.scaleY(option);
+								$(this).data('option', -data.option);
 								break;
+							case 'getCroppedCanvas':
+								result = this.cropper.getCroppedCanvas(option);
+								if (result) {
+									result.id = 'canvasResult';
+									// console.log(result)
 
-							case 'zoom':
-								this.cropper.zoom(option);
+									if (option == 'save') {
+										if (typeof $imageCanvas.toBlob !== "undefined") {
+											$imageCanvas.toBlob(function (blob) {
+												console.log(blob)
+												// send the blob to server etc.
+												// var formData = new FormData();
+
+												// formData.append('croppedImage', blob);
+
+												// $.ajax('upload.php', {
+												// 	method: "POST",
+												// 	data: formData,
+												// 	processData: false,
+												// 	contentType: false,
+												// 	success: function () {
+												// 		console.log('Upload success');
+												// 		$('#myModalCanvas').modal('hide');
+												// 	},
+												// 	error: function () {
+												// 		console.log('Upload error');
+												// 	}
+												// });
+											}, "image/jpeg", 0.75);
+										}
+										else if (typeof $imageCanvas.msToBlob !== "undefined") {
+											var blob = $imageCanvas.msToBlob()
+											// send blob
+										}
+										else {
+											// manually convert Data-URI to Blob (if no polyfill)
+										}
+									}
+								}
 								break;
 						}
-					}
-				}).cropper(options);
+					},
+				})
 			}else{
-				StartCrop()
+				StartCrop();
+				var $this = $(this);
+				// console.log($this)
+
+				var data = $this.data();
+				// console.log(data)
+
+				var cropper = $imageCanvas.data('cropper');
+				// console.log(cropper)
+
+				var cropped;
+				// console.log('method:',data.method)
+
+				if ($this.prop('disabled') || $this.hasClass('disabled')) {
+					return;
+				}
+
+				cropped = cropper.cropped;
+
+				if (cropper && data.method) {
+					data = $.extend({}, data);
+					
+					
+		
+					// console.log(window.arrActions)
+					// console.log(data.method, data.option)
+					switch (data.method) {
+						case 'zoom':
+							cropper.crop();
+							if (cropped && options.viewMode > 0) {
+								setTimeout(() => {
+									result = $imageCanvas.cropper(data.method, data.option);
+								}, 500);
+							}
+							window.arrActions.push(result)
+							break;
+
+						case 'rotate':
+							result = $imageCanvas.cropper(data.method, data.option);
+							break;
+
+						case 'scaleX':
+							result = $imageCanvas.cropper(data.method, data.option);
+							$(this).data('option', -data.option);
+							break;
+
+						case 'scaleY':
+							result = $imageCanvas.cropper(data.method, data.option);
+							$(this).data('option', -data.option);
+							break;
+
+						case 'getCroppedCanvas':
+							result = $imageCanvas.cropper(data.method, data.option);
+							if (result) {
+								result.id = 'canvasResult';
+								console.log(result)
+
+								if (data.option == 'save') {
+									if (typeof $imageCanvas.toBlob !== "undefined") {
+										$imageCanvas.toBlob(function (blob) {
+											console.log(blob)
+											// send the blob to server etc.
+											// var formData = new FormData();
+
+											// formData.append('croppedImage', blob);
+
+											// $.ajax('upload.php', {
+											// 	method: "POST",
+											// 	data: formData,
+											// 	processData: false,
+											// 	contentType: false,
+											// 	success: function () {
+											// 		console.log('Upload success');
+											// 		$('#myModalCanvas').modal('hide');
+											// 	},
+											// 	error: function () {
+											// 		console.log('Upload error');
+											// 	}
+											// });
+										}, "image/jpeg", 0.75);
+									}
+									else if (typeof $imageCanvas.msToBlob !== "undefined") {
+										var blob = $imageCanvas.msToBlob()
+										// send blob
+									}
+									else {
+										// manually convert Data-URI to Blob (if no polyfill)
+									}
+								}
+							}
+							break;
+
+						case 'destroy':
+							if (uploadedImageURL) {
+								URL.revokeObjectURL(uploadedImageURL);
+								uploadedImageURL = '';
+								$image.attr('src', originalImageURL);
+							}
+							break;
+					}
+
+				
+				} else {
+					console.log('out scope')
+				}
 			}
 
 			
-			var $this = $(this);
-			// console.log($this)
-
-			var data = $this.data();
-			// console.log(data)
-
-			var cropper = $imageCanvas.data('cropper');
-			// console.log(cropper)
-
-			var cropped;
-			var $target;
-			var result;
-
-			// console.log('method:',data.method)
-
-			if ($this.prop('disabled') || $this.hasClass('disabled')) {
-				return;
-			}
-
-			cropped = cropper.cropped;
-
-			if (cropper && data.method) {
-				data = $.extend({}, data);
-
-				result = $imageCanvas.cropper(data.method, data.option, data.secondOption);
-
-				window.arrActions.push(result)
-				console.log(window.arrActions)
-				
-				switch (data.method) {
-					case 'rotate':
-						$imageCanvas.cropper('crop');
-						break;
-
-					case 'scaleX':
-						$imageCanvas.cropper('scale',data.option, -data.option);
-						break;
-
-					case 'scaleY':
-						$imageCanvas.cropper('scale',-data.option, data.option);
-						break;
-
-					case 'getCroppedCanvas':
-						if (result) {
-							result.id = 'canvasResult';
-							// console.log(result)
-
-							if (data.option == 'save') {
-								if (typeof $imageCanvas.toBlob !== "undefined") {
-									$imageCanvas.toBlob(function (blob) {
-										console.log(blob)
-										// send the blob to server etc.
-										// var formData = new FormData();
-
-										// formData.append('croppedImage', blob);
-
-										// $.ajax('upload.php', {
-										// 	method: "POST",
-										// 	data: formData,
-										// 	processData: false,
-										// 	contentType: false,
-										// 	success: function () {
-										// 		console.log('Upload success');
-										// 		$('#myModal').modal('hide');
-										// 	},
-										// 	error: function () {
-										// 		console.log('Upload error');
-										// 	}
-										// });
-									}, "image/jpeg", 0.75);
-								}
-								else if (typeof $imageCanvas.msToBlob !== "undefined") {
-									var blob = $imageCanvas.msToBlob()
-									// send blob
-								}
-								else {
-									// manually convert Data-URI to Blob (if no polyfill)
-								}
-							}
-						}
-						break;
-
-					case 'destroy':
-						$imageCanvas.attr('src', originalImageURL);
-						break;
-				}
-			} else {
-				console.log('out scope')
-			}
+			
+			
+			
+			
+			
 
 		});
 	})

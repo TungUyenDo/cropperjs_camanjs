@@ -48,6 +48,7 @@ $(function() {
     var $hdr = $('#hdrbtn');
     var $oldpaper = $('#oldpaperbtn');
     var $pleasant = $('#pleasantbtn');
+  var $sharpen = $('#sharpenbtn');
   
     var $save = $('#savebtn');
   
@@ -66,6 +67,7 @@ $(function() {
       });
     }
   
+  
     /* Creating custom filters */
     Caman.Filter.register("oldpaper", function() {
       this.pinhole();
@@ -80,6 +82,13 @@ $(function() {
       this.sunrise();
       this.hazyDays();
       this.render();
+    });
+
+    $sharpen.on('click', function (e) {
+      Caman('#canvas', img, function () {
+        this.sharpen(20);
+        this.render();
+      });
     });
   
     $reset.on('click', function(e) {

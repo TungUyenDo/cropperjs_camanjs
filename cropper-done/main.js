@@ -667,7 +667,36 @@
 		});
 		// Methods
 		$('.docs-buttons').on('click', '[data-method]', function () {
+			// if(window.times == 1){
+				// window.isCrop = true;
+				// var option = $(this).attr('data-option');
+				// $imageCanvas.on({
+				// 	ready:function(e){
+				// 		switch(data.method){
+				// 			case 'rotate':
+				// 				this.cropper.rotate(option)
+				// 				break;
 
+				// 			case 'scaleX':
+				// 				this.cropper.scaleX(option);
+				// 				$(this).data('option', -data.option);
+				// 				break;
+
+				// 			case 'scaleY':
+				// 				this.cropper.scaleY(option);
+				// 				$(this).data('option', -data.option);
+				// 				break;
+				// 			default:
+				// 				this.cropper.crop(option);
+				// 				setTimeout(() => {
+				// 					this.cropper.zoom(option);
+				// 				}, 500);
+				// 		}
+				// 	},
+				// }).cropper(options);
+			// }else{
+			// 	StartCrop()
+			// }
 			StartCrop();
 			var $this = $(this);
 			// console.log($this)
