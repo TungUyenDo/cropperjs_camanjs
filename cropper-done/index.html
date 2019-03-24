@@ -152,12 +152,16 @@
 										<input id="brightness" name="brightness" type="range" min="-100" max="100" value="0">
 									</button>		
 								</div>
+								<button  id="resetbtn" class="btn btn-danger">
+									<i class="fa fa-eraser" aria-hidden="true"></i>
+									Reset
+								</button>
 							</div>
 						</nav>
 
 
 						<nav class="filters filter-right docs-buttons">
-							<button id="savePicture" data-method="getCroppedCanvas" data-option="save" class="btn btn-success">
+							<button disabled id="savePicture" data-method="getCroppedCanvas" data-option="save" class="btn btn-success">
 								<i class="fa fa-floppy-o" aria-hidden="true"></i>
 								Save
 							</button>
@@ -177,17 +181,15 @@
 				</div>
 
 				<div class="modal-footer">
-					<div class="act-button docs-buttons">
-						<button  id="resetbtn" class="btn btn-danger">
-							<i class="fa fa-eraser" aria-hidden="true"></i>
-							Reset
+					<div class="act-button docs-buttons"></div>
+					<div class="btn-group">
+						<button type="button" id="undo" class="btn btn-primary">
+							<span class="fa fa-rotate-left"></span>
 						</button>
-						<!-- <button type="button" class="btn btn-warning" data-method="getCroppedCanvas" data-option=""
-							data-target="#putData">
-								Review
-						</button> -->
+						<button type="button" id="" class="btn btn-primary">
+							<span class="fa fa-rotate-right"></span>
+						</button>
 					</div>
-
 				</div>
 			</div>
 

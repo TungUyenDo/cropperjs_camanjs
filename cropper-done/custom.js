@@ -3,6 +3,7 @@
 
 	window.isCrop = false;
 	window.arrActions = [];
+	window.times = 0;
 	$(document).ready(function(){
 		// caman===============================================================================================
 		var canvas = document.getElementById('canvas');
@@ -26,28 +27,45 @@
 		$('input[type=range]').change(applyFilters);
 
 		function applyFilters() {
+			
 			if (window.isCrop == true) {
 				DestroyCrop();
+				$('#savePicture').attr('data-method','getCroppedCanvas')
+				$('#savePicture').attr('data-option','save')
+				$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+			}else{
+				$('#savePicture').removeAttr('data-method')
+				$('#savePicture').removeAttr('data-option')
+				$('#savePicture').closest('.modal-actions').find('.filter-right').removeClass('docs-buttons')
 			}
 			var bright = parseInt($('#brightness').val());
 
 			Caman('#canvas', img, function () {
+				
 				this.revert(false);
 				this.brightness(bright);
 				$('.loading').html('Loading brightness...');
 				this.render(function () {
 					if (window.isCrop == true) {
 						StartCrop();
+						$('#savePicture').attr('data-method','getCroppedCanvas')
+						$('#savePicture').attr('data-option','save')
+						$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+					}else{
+						$('#savePicture').removeAttr('data-method')
+						$('#savePicture').removeAttr('data-option')
+						$('#savePicture').closest('.modal-actions').find('.filter-right').removeClass('docs-buttons')
 					}
 					$('.loading').html('Done!')
 					setTimeout(function () { $('.loading').html('') }, 1500);
+					$('#savePicture').removeAttr('disabled')
 				});
 			});
 		}
 
 		$reset.on('click', function (e) {
 			$('input[type=range]').val(0);
-
+			
 			Caman('#canvas', img, function () {
 				this.revert(false);
 				this.render();
@@ -55,23 +73,39 @@
 				window.isCrop = false;
 				// window.times = 0;
 				window.arrActions = [];
+				$('#savePicture').attr('disabled',true)
 			});
 		});
 
 		
 		/* In built filters */  /* click and pull for range on input element */
 		$pinhole.on('click', function (e) {
-
+			
 			if (window.isCrop == true) {
 				DestroyCrop();
+				$('#savePicture').attr('data-method','getCroppedCanvas')
+				$('#savePicture').attr('data-option','save')
+				$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+			}else{
+				$('#savePicture').removeAttr('data-method')
+				$('#savePicture').removeAttr('data-option')
+				$('#savePicture').closest('.modal-actions').find('.filter-right').removeClass('docs-buttons')
 			}
 			Caman('#canvas', img, function () {
-				// DestroyCrop();
+				
 				this.pinhole();
 				$('.loading').html('Loading sharpen...');
 				this.render(function () {
+					$('#savePicture').removeAttr('disabled')
 					if (window.isCrop == true) {
 						StartCrop();
+						$('#savePicture').attr('data-method','getCroppedCanvas')
+						$('#savePicture').attr('data-option','save')
+						$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+					}else{
+						$('#savePicture').removeAttr('data-method')
+						$('#savePicture').removeAttr('data-option')
+						$('#savePicture').closest('.modal-actions').find('.filter-right').removeClass('docs-buttons')
 					}
 					$('.loading').html('Done!')
 					setTimeout(function () { $('.loading').html('') }, 1500);
@@ -79,6 +113,13 @@
 			});
 		});
 
+		$('#savePicture').click(function(){
+			Caman('#canvas', img, function () {
+				canvas.toBlob(function(blob) {
+					console.log(blob)
+				});
+			})
+		})
 
 		//end caman===============================================================================================
 
@@ -102,8 +143,6 @@
 		var console = window.console || { log: function () { } };
 		var $imageCanvas = $('#canvas');
 		var originalImageURL = $('#picture').attr('src');
-		var uploadedImageName = 'cropped.jpg';
-		var uploadedImageType = 'image/jpeg';
 		var uploadedImageURL;
 
 		var options = {
@@ -118,10 +157,7 @@
 			$imageCanvas.cropper(options);
 		}
 		function DestroyCrop() {
-			
-			// window.times = 0;
 			window.arrActions = [];
-			
 			$imageCanvas.cropper('destroy');
 			console.log('destroy')
 		}
@@ -129,7 +165,15 @@
 		//click ratio 4/3, 16/9...
 		$('.docs-toggles').on('click', function () {
 			StartCrop();
-
+			window.isCrop = true;
+			if(window.isCrop){
+				$('#savePicture').removeAttr('disabled')
+				if(!$('#savePicture').attr('data-method') && !$('#savePicture').attr('data-option')){
+					$('#savePicture').attr('data-method','getCroppedCanvas')
+					$('#savePicture').attr('data-option','save');
+					$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+				}
+			}
 			var e = event || window.event;
 			var target = e.target || e.srcElement;
 			var cropBoxData;
@@ -171,12 +215,22 @@
 			}
 		});
 
-		window.times = 0;
+		
 		$('.docs-buttons').on('click', '[data-method]', function () {
 			window.times ++;
 			var result;
+			window.isCrop = true;
+			if(window.isCrop){
+				$('#savePicture').removeAttr('disabled')
+				if(!$('#savePicture').attr('data-method') && !$('#savePicture').attr('data-option')){
+					$('#savePicture').attr('data-method','getCroppedCanvas')
+					$('#savePicture').attr('data-option','save')
+					$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
+				}
+			}
+			
 			if(window.times == 1){
-				window.isCrop = true;
+				
 				var method = $(this).attr('data-method');
 				var option = $(this).attr('data-option');
 				$imageCanvas.cropper({
@@ -185,19 +239,23 @@
 						switch (method) {
 							case 'rotate':
 								result = this.cropper.rotate(option);
+								console.log('rotate',result)
 								break;
 
 							case 'scaleX':
 								result = this.cropper.scaleX(option);
-								$(this).data('option', -data.option);
+								$(this).data('option', -option);
+								console.log('scaleX',result)
 								break;
 
 							case 'scaleY':
 								result = this.cropper.scaleY(option);
-								$(this).data('option', -data.option);
+								$(this).data('option', -option);
+								console.log('scaleY',result)
 								break;
 							case 'getCroppedCanvas':
 								result = this.cropper.getCroppedCanvas(option);
+								console.log('getCroppedCanvas',result)
 								if (result) {
 									result.id = 'canvasResult';
 									// console.log(result)
@@ -239,6 +297,7 @@
 						}
 					},
 				})
+				
 			}else{
 				StartCrop();
 				var $this = $(this);
@@ -262,40 +321,39 @@
 				if (cropper && data.method) {
 					data = $.extend({}, data);
 					
-					
-		
-					// console.log(window.arrActions)
-					// console.log(data.method, data.option)
 					switch (data.method) {
 						case 'zoom':
 							cropper.crop();
-							if (cropped && options.viewMode > 0) {
-								setTimeout(() => {
-									result = $imageCanvas.cropper(data.method, data.option);
-								}, 500);
-							}
-							window.arrActions.push(result)
+							result = $imageCanvas.cropper(data.method, data.option);
+							// console.log(2,result);
+							window.arrActions.push(result[0])
 							break;
 
 						case 'rotate':
 							result = $imageCanvas.cropper(data.method, data.option);
+							// console.log(2,result);
+							window.arrActions.push(result[0])
 							break;
 
 						case 'scaleX':
 							result = $imageCanvas.cropper(data.method, data.option);
 							$(this).data('option', -data.option);
+							// console.log(2,result);
+							window.arrActions.push(result[0])
 							break;
 
 						case 'scaleY':
 							result = $imageCanvas.cropper(data.method, data.option);
 							$(this).data('option', -data.option);
+							// console.log(2,result);
+							window.arrActions.push(result[0])
 							break;
 
 						case 'getCroppedCanvas':
 							result = $imageCanvas.cropper(data.method, data.option);
+							// console.log(2,result)
 							if (result) {
 								result.id = 'canvasResult';
-								console.log(result)
 
 								if (data.option == 'save') {
 									if (typeof $imageCanvas.toBlob !== "undefined") {
@@ -340,21 +398,23 @@
 							}
 							break;
 					}
-
+					// console.log(window.arrActions)
 				
 				} else {
 					console.log('out scope')
 				}
+
+				
 			}
 
-			
-			
-			
-			
-			
-			
-
 		});
+
+		$('#undo').click(function(){
+			console.log(window.arrActions)
+			console.log(window.arrActions.length);
+			$imageCanvas = window.arrActions[length]
+
+		})
 	})
 
 
