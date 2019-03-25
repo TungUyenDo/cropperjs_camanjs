@@ -116,7 +116,40 @@
 		$('#savePicture').click(function(){
 			Caman('#canvas', img, function () {
 				canvas.toBlob(function(blob) {
-					console.log(blob)
+					var formData = new FormData();
+					console.log(7, blob)
+					formData.append('croppedImage', blob);
+					formData.append('image_id', 6290);
+					console.log(formData)
+					$.ajax({
+						url: 'http://beta.oogquay.com/users/dentist/ajaxSaveImageRevision.html',	
+            			type: "POST",
+						data: formData,
+						dataType: 'json',
+						processData: false,
+						contentType: false,
+
+						success: function (response) {
+							$("#savePicture").removeAttr("disabled")
+							console.log(response)
+							console.log('Upload success');
+							// $('#myModalCanvas').modal('hide');
+							// // update new image
+							// $('.viewport img').each(function () {
+							// 	var text = $(this).attr('src');
+							// 	var data_image_old = $('.data-image-old').text()
+							// 	console.log(text, data_image_old, text == data_image_old)
+							// 	text = text.replace(data_image_old, response.path);
+
+							// 	$(this).attr('src', text)
+							// });
+							// $('.data-image-' + response.image_id).find('.reponsive-block').find('.reponsive-block').find('.img-case-view').attr('src', response.path)
+							// $('.data-image-' + response.image_id).find('.edit-image-btn').attr('data-imgvalue', response.path)
+						},
+						error: function () {
+							console.log('Upload error');
+						}
+					});
 				});
 			})
 		})
@@ -189,30 +222,34 @@
 				target = target.querySelector('input');
 			}
 
-			isCheckbox = target.type === 'checkbox';
-			isRadio = target.type === 'radio';
+			// isCheckbox = target.type === 'checkbox';
+			// isRadio = target.type === 'radio';
 
-			if (isCheckbox || isRadio) {
-				if (isCheckbox) {
-					options[target.name] = target.checked;
-					cropBoxData = cropper.getCropBoxData();
-					canvasData = cropper.getCanvasData();
+			// if (isCheckbox || isRadio) {
+			// 	if (isCheckbox) {
+			// 		options[target.name] = target.checked;
+			// 		cropBoxData = cropper.getCropBoxData();
+			// 		canvasData = cropper.getCanvasData();
 
-					options.ready = function () {
-						// console.log('ready');
-						cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
-					};
-				} else {
-					options[target.name] = target.value;
-					options.ready = function () {
-						// console.log('ready');
-					};
-				}
+			// 		options.ready = function () {
+			// 			// console.log('ready');
+			// 			cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+			// 		};
+			// 	} else {
+			// 		options[target.name] = target.value;
+			// 		options.ready = function () {
+			// 			// console.log('ready');
+			// 		};
+			// 	}
 
-				// Restart
-				DestroyCrop()
-				StartCrop()
-			}
+			// 	// Restart
+			// 	DestroyCrop()
+			// 	StartCrop()
+			// }
+			cropBoxData = cropper.getCropBoxData();
+			canvasData = cropper.getCanvasData();
+			DestroyCrop()
+			StartCrop()
 		});
 
 		
@@ -220,11 +257,11 @@
 			window.times ++;
 			var result;
 			window.isCrop = true;
-			if(window.isCrop){
+			if (window.isCrop) {
 				$('#savePicture').removeAttr('disabled')
-				if(!$('#savePicture').attr('data-method') && !$('#savePicture').attr('data-option')){
-					$('#savePicture').attr('data-method','getCroppedCanvas')
-					$('#savePicture').attr('data-option','save')
+				if (!$('#savePicture').attr('data-method') && !$('#savePicture').attr('data-option')) {
+					$('#savePicture').attr('data-method', 'getCroppedCanvas')
+					$('#savePicture').attr('data-option', 'save');
 					$('#savePicture').closest('.modal-actions').find('.filter-right').addClass('docs-buttons')
 				}
 			}
@@ -263,25 +300,40 @@
 									if (option == 'save') {
 										if (typeof $imageCanvas.toBlob !== "undefined") {
 											$imageCanvas.toBlob(function (blob) {
-												console.log(blob)
-												// send the blob to server etc.
-												// var formData = new FormData();
+												var formData = new FormData();
+												console.log(7, blob)
+												formData.append('croppedImage', blob);
+												formData.append('image_id', 6290);
+												console.log(formData)
+												$.ajax({
+													url: 'http://beta.oogquay.com/users/dentist/ajaxSaveImageRevision.html',
+													type: "POST",
+													data: formData,
+													dataType: 'json',
+													processData: false,
+													contentType: false,
 
-												// formData.append('croppedImage', blob);
+													success: function (response) {
+														$("#savePicture").removeAttr("disabled")
+														console.log(response)
+														console.log('Upload success');
+														// $('#myModalCanvas').modal('hide');
+														// // update new image
+														// $('.viewport img').each(function () {
+														// 	var text = $(this).attr('src');
+														// 	var data_image_old = $('.data-image-old').text()
+														// 	console.log(text, data_image_old, text == data_image_old)
+														// 	text = text.replace(data_image_old, response.path);
 
-												// $.ajax('upload.php', {
-												// 	method: "POST",
-												// 	data: formData,
-												// 	processData: false,
-												// 	contentType: false,
-												// 	success: function () {
-												// 		console.log('Upload success');
-												// 		$('#myModalCanvas').modal('hide');
-												// 	},
-												// 	error: function () {
-												// 		console.log('Upload error');
-												// 	}
-												// });
+														// 	$(this).attr('src', text)
+														// });
+														// $('.data-image-' + response.image_id).find('.reponsive-block').find('.reponsive-block').find('.img-case-view').attr('src', response.path)
+														// $('.data-image-' + response.image_id).find('.edit-image-btn').attr('data-imgvalue', response.path)
+													},
+													error: function () {
+														console.log('Upload error');
+													}
+												});
 											}, "image/jpeg", 0.75);
 										}
 										else if (typeof $imageCanvas.msToBlob !== "undefined") {
@@ -358,25 +410,40 @@
 								if (data.option == 'save') {
 									if (typeof $imageCanvas.toBlob !== "undefined") {
 										$imageCanvas.toBlob(function (blob) {
-											console.log(blob)
-											// send the blob to server etc.
-											// var formData = new FormData();
+											var formData = new FormData();
+											console.log(7, blob)
+											formData.append('croppedImage', blob);
+											formData.append('image_id', 6290);
+											console.log(formData)
+											$.ajax({
+												url: 'http://beta.oogquay.com/users/dentist/ajaxSaveImageRevision.html',
+												type: "POST",
+												data: formData,
+												dataType: 'json',
+												processData: false,
+												contentType: false,
 
-											// formData.append('croppedImage', blob);
+												success: function (response) {
+													$("#savePicture").removeAttr("disabled")
+													console.log(response)
+													console.log('Upload success');
+													// $('#myModalCanvas').modal('hide');
+													// // update new image
+													// $('.viewport img').each(function () {
+													// 	var text = $(this).attr('src');
+													// 	var data_image_old = $('.data-image-old').text()
+													// 	console.log(text, data_image_old, text == data_image_old)
+													// 	text = text.replace(data_image_old, response.path);
 
-											// $.ajax('upload.php', {
-											// 	method: "POST",
-											// 	data: formData,
-											// 	processData: false,
-											// 	contentType: false,
-											// 	success: function () {
-											// 		console.log('Upload success');
-											// 		$('#myModalCanvas').modal('hide');
-											// 	},
-											// 	error: function () {
-											// 		console.log('Upload error');
-											// 	}
-											// });
+													// 	$(this).attr('src', text)
+													// });
+													// $('.data-image-' + response.image_id).find('.reponsive-block').find('.reponsive-block').find('.img-case-view').attr('src', response.path)
+													// $('.data-image-' + response.image_id).find('.edit-image-btn').attr('data-imgvalue', response.path)
+												},
+												error: function () {
+													console.log('Upload error');
+												}
+											});
 										}, "image/jpeg", 0.75);
 									}
 									else if (typeof $imageCanvas.msToBlob !== "undefined") {
